@@ -9,7 +9,7 @@
 findairport_ret *
 findairport_1_svc(airportlocation *argp, struct svc_req *rqstp)
 {
-	printf("AIRPORT...\n");
+	printf("AIRPORT... \n");
 
 	static findairport_ret result;
 	airportlocation args = *argp;

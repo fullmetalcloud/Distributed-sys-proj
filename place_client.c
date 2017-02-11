@@ -35,12 +35,13 @@ places_dirprog_1(char *host, char *city, char *state)
 			exit(1);
 		}
 		// print directories
-		if(result_1->findplace_ret_u.ans.status==1)
+		if (result_1->findplace_ret_u.ans.status==1){
 			printf("%s,%s NOT FOUND.\n",city,state);
-		else if(result_1->findplace_ret_u.ans.status==2)
+		}
+		else if(result_1->findplace_ret_u.ans.status==2){
 			printf("AMBIGUOUS CITY NAME: %s \n",city);
-		printf("%s, %s: %f %f \n", city, state, result_1->findplace_ret_u.ans.latitude, result_1->findplace_ret_u.ans.longitude);
-		else {
+		}else {
+			printf("%s, %s: %f %f \n", city, state, result_1->findplace_ret_u.ans.latitude, result_1->findplace_ret_u.ans.longitude);
 			curr = result_1->findplace_ret_u.ans.list;
 			while(curr) {
 				printf("code=%s, name=%s, state=%s, distance: %u \n",curr->code, curr->city, curr->state, curr->distance);
