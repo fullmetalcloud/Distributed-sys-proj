@@ -6,6 +6,27 @@
 
 #include "place.h"
 #include "errno.h"
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+
+bool isStateValid(string state){
+
+	const int nbr_states = 51; // including DC
+
+	string states [nbr_states] = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE",
+								  "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",
+								  "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
+								  "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND",
+								  "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX",
+								  "UT", "VT", "VA", "WA", "WV", "WI", "WY"};
+
+	for (int i=0; i < nbr_states; ++i) {
+		if (states[i] == state)
+			return true;
+	}
+	return false;
+}
 
 void
 places_dirprog_1(char *host, char *city, char *state)
@@ -55,17 +76,19 @@ places_dirprog_1(char *host, char *city, char *state)
 #endif	 /* DEBUG */
 }
 
-
 int
 main (int argc, char *argv[])
 {
-	char *host;
+	//char *host;
 
 	if (argc < 4) {
 		printf ("usage: %s server_host\n", argv[0]);
 		exit (1);
 	}
-	host = argv[1];
-	places_dirprog_1 (host, argv[2],argv[3]);
+	
+	string state = argv[2];
+	cout<<isStateValid(state)<<endl;
+	//host = argv[1];
+	places_dirprog_1 (argv[1], argv[2],argv[3]);
 exit (0);
 }
