@@ -7,10 +7,6 @@
 #define _PLACE_H_RPCGEN
 
 #include <rpc/rpc.h>
-#include <cstdlib>
-#include <cstring>
-#include <stack>
-#include <algorithm>
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,8 +52,6 @@ struct findplace_ret {
 	} findplace_ret_u;
 };
 typedef struct findplace_ret findplace_ret;
-
-extern nametype globalptr;
 
 #define PLACES_DIRPROG 0x34758651
 #define PLACES_DIR_VERS 1
