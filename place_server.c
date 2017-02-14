@@ -128,7 +128,7 @@ class trie
                         status = 0;
                         info.lat = cur->info[stateCount].lat;
                         info.lon = cur->info[stateCount].lon;
-                        strcpy(info.state,cur->info[stateCount].state);
+                        strncpy(info.state,cur->info[stateCount].state,2);
                         strcpy(info.city,cur->info[stateCount].city);
                         break;
                     }
@@ -160,7 +160,7 @@ class trie
                             status = 0;
                             info.lat = cur->info[stateCount].lat;
                             info.lon = cur->info[stateCount].lon;
-                            strcpy(info.state,cur->info[stateCount].state);
+                            strncpy(info.state,cur->info[stateCount].state,2);
                             strcpy(info.city,cur->info[stateCount].city);
                             break;
                         }
@@ -201,8 +201,7 @@ startup()
         strncpy(city, line+9, 62);
         removeSpace(city);
         strcpy(city_details.city,city);
-        strncpy(temp, line, 2);
-        strcpy(city_details.state, temp);
+        strncpy(city_details.state, line, 2);
         memset(temp,' ',10);
         uppercase(city);
         strncpy(temp, line+143, 10);
