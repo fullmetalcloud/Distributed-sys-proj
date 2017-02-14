@@ -12,6 +12,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+using namespace std;
+
 #ifndef SIG_PF
 #define SIG_PF void(*)(int)
 #endif

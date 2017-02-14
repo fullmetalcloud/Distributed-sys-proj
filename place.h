@@ -7,11 +7,16 @@
 #define _PLACE_H_RPCGEN
 
 #include <rpc/rpc.h>
-
+#include <cstdlib>
+#include <cstring>
+#include <stack>
+#include <algorithm>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+using namespace std;
 
 #define MAXLEN 255
 
@@ -29,13 +34,15 @@ struct place {
 typedef struct place place;
 
 struct placename {
-	char *city;
-	char *state;
+	nametype city;
+	nametype state;
 };
 typedef struct placename placename;
 
 struct answer {
 	placelist list;
+	nametype city;
+	nametype state;
 	float latitude;
 	float longitude;
 	int status;
@@ -49,6 +56,8 @@ struct findplace_ret {
 	} findplace_ret_u;
 };
 typedef struct findplace_ret findplace_ret;
+
+extern nametype globalptr;
 
 #define PLACES_DIRPROG 0x34758651
 #define PLACES_DIR_VERS 1

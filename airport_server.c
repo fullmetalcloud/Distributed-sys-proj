@@ -9,8 +9,6 @@
 findairport_ret *
 findairport_1_svc(airportlocation *argp, struct svc_req *rqstp)
 {
-	printf("AIRPORT... \n");
-
 	static findairport_ret result;
 	airportlocation args = *argp;
 	airportlist newlist;
@@ -27,12 +25,12 @@ findairport_1_svc(airportlocation *argp, struct svc_req *rqstp)
 
 	
 	listptr = &result.findairport_ret_u.list;
-	if(lat == 1.0f){
+	for (int i=0;i<5;i++){
 		newlist = *listptr = (airport *) malloc(sizeof(airport));
 		newlist->city = (char *)malloc(strlen(cityname));
 		newlist->state = (char *)malloc(strlen(statename));
 		newlist->code = (char *)malloc(strlen(code));
-		newlist->distance = (int) malloc(sizeof(distance));
+		//newlist->distance = (int) malloc(sizeof(distance));
 		strcpy(newlist->city,cityname);	
 		strcpy(newlist->state,statename);	
 		strcpy(newlist->code,code);		
