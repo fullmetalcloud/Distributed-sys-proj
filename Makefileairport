@@ -19,8 +19,8 @@ TARGETS = airport.h airport_xdr.c airport_clnt.c airport_svc.c airport_client.c 
 OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)
 OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)
 # Compiler flags 
-CC=g++
-CFLAGS += -g
+CC=g++ -std=c++11 #-std=c++0x
+CFLAGS += -g -DRPC_SVC_FG
 LDLIBS += -lnsl
 RPCGENFLAGS = 
 

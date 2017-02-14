@@ -10,8 +10,8 @@ struct airport{
  airportlist next;
 };
 struct airportlocation{
- int latitude;
- int longitude;
+ float latitude;
+ float longitude;
 };
 
 /*result of a findairport operation*/
