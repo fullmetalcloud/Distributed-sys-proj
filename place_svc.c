@@ -12,7 +12,6 @@
 #include <memory.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <iostream>
 #include <sstream>
 #include <cstdlib>
 #include <cstring>
@@ -24,6 +23,10 @@ using namespace std;
 #ifndef SIG_PF
 #define SIG_PF void(*)(int)
 #endif
+
+/*
+Trie Tree/Prefix Match Initialization
+*/
 trie::trie() 
 { 
     root = new_node(0);
@@ -56,6 +59,7 @@ void trie::uppercase(char* str) {
 
 void trie::add(char* S, PlacesInfo info) 
 { 
+    //add to trie tree
     node *cur = root;
     int temp;
     int size = strlen(S);
@@ -82,6 +86,8 @@ void trie::add(char* S, PlacesInfo info)
 
 int trie::check(node *root, char *city, char* state, PlacesInfo& info) 
 { 
+    //search trie tree for prefix matching based on word city
+    //status => 0 = found, 1 = not found, 2 = ambiguous city name
     node *cur = root;
     node *nodeCheck;
     
@@ -101,9 +107,10 @@ int trie::check(node *root, char *city, char* state, PlacesInfo& info)
         else
             return 1;  
     }
-
+    //if perfect match found for city
     if(cur->isCity)
     {
+        //check if given state matches with city
         while(stateCount <= cur->count){
             if(strncmp(state,cur->info[stateCount].state,2)==0)
             {
@@ -122,6 +129,7 @@ int trie::check(node *root, char *city, char* state, PlacesInfo& info)
     } 
     else
     {
+        //check if there exists a SINGLE city that could match with city
         while(cur->count==1&&!cur->isCity)
         {
             nodeCheck = cur->child[checkCount];
@@ -136,6 +144,7 @@ int trie::check(node *root, char *city, char* state, PlacesInfo& info)
         }
         if(cur->isCity)
         {
+            //check if state exists with found city
             while(stateCount <= cur->count){
                 if(strncmp(state,cur->info[stateCount].state,2)==0)
                 {
@@ -153,6 +162,7 @@ int trie::check(node *root, char *city, char* state, PlacesInfo& info)
             }
         }
         else
+            //ambiguous city name
             status = 2;
     }
     return status;
@@ -160,6 +170,7 @@ int trie::check(node *root, char *city, char* state, PlacesInfo& info)
 
 int trie::checkroot(char* input, char* state, PlacesInfo& info) 
 { 
+    //check if trie tree exists and input is a word
     if (root && sizeof(input) > 0 && input[0] >= 'A') 
         return check(root, input, state, info); 
     else 
@@ -168,6 +179,7 @@ int trie::checkroot(char* input, char* state, PlacesInfo& info)
 void
 startup(trie* ptr)
 {
+    //initialize trie tree with places2k.txt file
     trie dict = *ptr;
     
     FILE *pFile = fopen("places2k.txt","r");
@@ -241,8 +253,11 @@ int
 main (int argc, char **argv)
 {
 	register SVCXPRT *transp;
+
+    //start and save trie tree with singleton instance
 	trie *prefixTree = trie::getInstance();
 	startup(prefixTree);
+    
 	pmap_unset (PLACES_DIRPROG, PLACES_DIR_VERS);
 
 	transp = svcudp_create(RPC_ANYSOCK);

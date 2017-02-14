@@ -61,10 +61,10 @@ places_dirprog_1(char *host, char *city, char *state)
 		}
 		// print directories
 		if (result_1->findplace_ret_u.ans.status==1){
-			printf("%s,%s NOT FOUND.\n",city,state);
+			printf("%s, %s NOT FOUND.\n",city,state);
 		}
 		else if(result_1->findplace_ret_u.ans.status==2){
-			printf("AMBIGUOUS CITY NAME: %s \n",city);
+			printf("AMBIGUOUS CITY NAME: %s. BE MORE SPECIFIC.\n",city);
 		}else {
 			printf("%s, %s: %f %f \n", result_1->findplace_ret_u.ans.city, result_1->findplace_ret_u.ans.state
 				, result_1->findplace_ret_u.ans.latitude, result_1->findplace_ret_u.ans.longitude);

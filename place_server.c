@@ -39,6 +39,7 @@ findplace_1_svc(placename *argp, struct svc_req *rqstp)
     dict.removeSpace(input.city);
     dict.uppercase(input.state);
     status  = dict.checkroot(input.city, input.state, info);
+    
     //store info into return value
     result.findplace_ret_u.ans.status = status;
     result.findplace_ret_u.ans.city = (char *)malloc(strlen(info.city));
