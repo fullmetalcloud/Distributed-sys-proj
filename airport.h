@@ -29,8 +29,8 @@ struct airport {
 typedef struct airport airport;
 
 struct airportlocation {
-	int latitude;
-	int longitude;
+	float latitude;
+	float longitude;
 };
 typedef struct airportlocation airportlocation;
 

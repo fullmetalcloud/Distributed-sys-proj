@@ -48,9 +48,9 @@ xdr_airportlocation (XDR *xdrs, airportlocation *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_int (xdrs, &objp->latitude))
+	 if (!xdr_float (xdrs, &objp->latitude))
 		 return FALSE;
-	 if (!xdr_int (xdrs, &objp->longitude))
+	 if (!xdr_float (xdrs, &objp->longitude))
 		 return FALSE;
 	return TRUE;
 }

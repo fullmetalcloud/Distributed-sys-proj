@@ -10,11 +10,13 @@ struct place{
  placelist next;
 };
 struct placename{
- char *city;
- char *state;
+ nametype city;
+ nametype state;
 };
 struct answer{
  placelist list;
+ nametype city;
+ nametype state;
  float latitude;
  float longitude;
  int status;

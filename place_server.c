@@ -5,46 +5,67 @@
  */
 #include "errno.h"
 #include "place.h"
+#include "prefixmatch.h"
 #include "airport.h"
+#include <sstream>
+#include <cstdlib>
+#include <cstring>
+#include <stack>
+#include <algorithm>
+
 findplace_ret *
 findplace_1_svc(placename *argp, struct svc_req *rqstp)
 {
-	static findplace_ret result;
-	float lat, longi;       
+    static findplace_ret result;
+    trie *prefixTree = trie::getInstance();
+    trie dict = *prefixTree;  
 	CLIENT *clnt;
 	char hostname[] = "cs1.seattleu.edu";
 	char *host = hostname;
+	placename input = *argp;
 	findairport_ret  *result_1;
 	airportlocation  findairport_1_arg;
 	airportlist curr;
 	placelist newlist;
 	placelist *listptr;
+	PlacesInfo info;
+    int status, count =0;
 
+    //free mem of last result
 	xdr_free ((xdrproc_t) xdr_findplace_ret,  (char *) &result);
-	/*  city and state checks here  */
 
-	/*  lat/long results of given city/state  */
-	result.findplace_ret_u.ans.status = 0;
-	lat = 1.0f;
-	longi = 1.0f;
+    //search tree for match
+    dict.uppercase(input.city);
+    dict.removeSpace(input.city);
+    dict.uppercase(input.state);
+    status  = dict.checkroot(input.city, input.state, info);
+    
+    //store info into return value
+    result.findplace_ret_u.ans.status = status;
+    result.findplace_ret_u.ans.city = (char *)malloc(strlen(info.city));
+	result.findplace_ret_u.ans.state = (char *)malloc(strlen(input.state));
+	strcpy(result.findplace_ret_u.ans.city, info.city);
+    strcpy(result.findplace_ret_u.ans.state, input.state);
+	result.findplace_ret_u.ans.latitude = (float)info.lat;
+	result.findplace_ret_u.ans.longitude = (float)info.lon; 
 
-	findairport_1_arg.latitude = lat;
-	findairport_1_arg.longitude = longi;
-	result.findplace_ret_u.ans.latitude = lat;
-	result.findplace_ret_u.ans.longitude = longi;
+    //send lat and long input to airport server
+	findairport_1_arg.latitude = (float)info.lat;
+	findairport_1_arg.longitude = (float)info.lon; 
 	#ifndef	DEBUG
 		clnt = clnt_create (host, AIRPORT_DIRPROG, AIRPORT_DIR_VERS, "udp");
 		if (clnt == NULL) {
 			clnt_pcreateerror (host);
 			exit (1);
 		}
-	#endif	/* DEBUG */
+	#endif	
 
 	result_1 = findairport_1(&findairport_1_arg, clnt);
 	if (result_1 == (findairport_ret *) NULL) {
 		clnt_perror (clnt, "call failed");
 	} else {
-	/*code in here for success plz*/
+
+        //transfer airport result to place result
 		curr = result_1->findairport_ret_u.list;
 		listptr = &result.findplace_ret_u.ans.list;
 		while(curr){
@@ -52,7 +73,7 @@ findplace_1_svc(placename *argp, struct svc_req *rqstp)
 			newlist->city = (char *)malloc(strlen(curr->city));
 			newlist->state = (char *)malloc(strlen(curr->state));
 			newlist->code = (char *)malloc(strlen(curr->code));
-			newlist->distance = (int)malloc(sizeof(curr->distance));
+			//newlist->distance = malloc(sizeof(int));
 			strcpy(newlist->city,curr->city);
 			strcpy(newlist->state,curr->state);
 			strcpy(newlist->code,curr->code);	
@@ -65,9 +86,8 @@ findplace_1_svc(placename *argp, struct svc_req *rqstp)
 	}
 
 	#ifndef	DEBUG
-			xdr_free ((xdrproc_t) xdr_findairport_ret,  (char *) &result_1);
+		xdr_free ((xdrproc_t) xdr_findairport_ret,  (char *) &result_1);
 		clnt_destroy (clnt);
-	#endif	 /* DEBUG */
-
+	#endif
 	return &result;
 }

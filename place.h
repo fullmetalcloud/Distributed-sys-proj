@@ -8,10 +8,11 @@
 
 #include <rpc/rpc.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+using namespace std;
 
 #define MAXLEN 255
 
@@ -29,13 +30,15 @@ struct place {
 typedef struct place place;
 
 struct placename {
-	char *city;
-	char *state;
+	nametype city;
+	nametype state;
 };
 typedef struct placename placename;
 
 struct answer {
 	placelist list;
+	nametype city;
+	nametype state;
 	float latitude;
 	float longitude;
 	int status;

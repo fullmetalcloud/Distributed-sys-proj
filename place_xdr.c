@@ -48,9 +48,9 @@ xdr_placename (XDR *xdrs, placename *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->city, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_nametype (xdrs, &objp->city))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->state, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_nametype (xdrs, &objp->state))
 		 return FALSE;
 	return TRUE;
 }
@@ -61,6 +61,10 @@ xdr_answer (XDR *xdrs, answer *objp)
 	register int32_t *buf;
 
 	 if (!xdr_placelist (xdrs, &objp->list))
+		 return FALSE;
+	 if (!xdr_nametype (xdrs, &objp->city))
+		 return FALSE;
+	 if (!xdr_nametype (xdrs, &objp->state))
 		 return FALSE;
 	 if (!xdr_float (xdrs, &objp->latitude))
 		 return FALSE;
