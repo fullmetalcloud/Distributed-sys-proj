@@ -27,7 +27,6 @@ struct near_candidates{
     string code;
     float distance;
 };
-//vector<near_candidates> nc;
 
 bool operator <(const near_candidates &lhs, const near_candidates &rhs){
     return (lhs.distance < rhs.distance);
@@ -125,7 +124,8 @@ void nearestAirSearch(vector<near_candidates> &nc, map<string, struct
     }
     else{
     temp_coord = airport_list.find(nc[0].code)->second.lon;}
-
+    //if nc isnt full or absolute value of our (user coordinate - root coordinate) is smaller
+    //worst distance in nc
     if (nc.size()!=5 || fabs(coordinates[curr_dim] - root->point[curr_dim])
                         < nc[0].distance){
 
@@ -147,7 +147,7 @@ depth){
     if(root==NULL){
         return newNode(lat, lon, airport_code);
     }
-
+    
     int curr_dim = depth % k; // current tree dimension for select of x or y
     float coordinates[k]={lat,lon};
 
@@ -206,17 +206,8 @@ void airportMap(map<string, struct AirportInfo>& airport_list){
     }
 
     airport_file.close();
-
-    //for (const auto &c: airport_list){
-    //    cout << c.first <<" "<< c.second.city <<" "<< c.second.state
-    //         <<" "<< c.second.lat <<" "<< c.second.lon <<endl;
-    //}
 }
 
-void strtochar(char* c, string str)
-{
-
-}
 
 findairport_ret *
 findairport_1_svc(airportlocation *argp, struct svc_req *rqstp)
@@ -236,8 +227,6 @@ findairport_1_svc(airportlocation *argp, struct svc_req *rqstp)
 
     near_candidates temp;
     AirportInfo airportTemp;
-	//double user_lat = 32;
-    //double user_lon = -87;
     struct Node* root = NULL;
     vector<near_candidates> nc;
     map<string, AirportInfo> airport_list;
